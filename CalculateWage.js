@@ -67,6 +67,7 @@ let empDailyWageMap = new Map();
 let empDailyHoursMap = new Map();
 //UC8
 let dailyWageMap = new Map(); 
+let dailyHourMap = new Map();  
 
 
 const getWorkingHours = (emp) => 
@@ -82,7 +83,7 @@ for (let day = 0; day < NUM_OF_WORKING_DAYS; day++) {
     let empCheck = Math.floor(Math.random() * 10) % 3;  
     totalEmpHrs += getWorkingHours(empCheck);  
 }  
-while (totalEmpHrs < MAX_HOURS_IN_MONTH && totalWorkingDays < NUM_OF_WORKING_DAYS) {  
+while (totalEmpHrs < MAX_HRS_IN_MONTH && totalWorkingDays < NUM_OF_WORKING_DAYS) {  
     totalWorkingDays++;  
     let empCheck = Math.floor(Math.random() * 10) % 3;  
     totalEmpHrs = getWorkingHours(empCheck); 
@@ -98,6 +99,8 @@ while (totalEmpHrs < MAX_HOURS_IN_MONTH && totalWorkingDays < NUM_OF_WORKING_DAY
     empDailyWageMap.set(totalWorkingDays, dailyWage); 
     empDailyHoursMap.set(totalWorkingDays, empHrs);
     dailyWageMap.set(totalWorkingDays, dailyWage);
+    dailyWageMap.set(totalWorkingDays, dailyWage); 
+    dailyHourMap.set(totalWorkingDays, empHrs);
 }  
 let totalEmpWage = totalEmpHrs * WAGE_PER_HOUR;  
 console.log("Total Days Worked: " + totalWorkingDays + ", Total Hours Worked: " + totalEmpHrs); 
@@ -145,3 +148,28 @@ totalWage = Array.from(dailyWageMap.values()).reduce((total, wage) => total + wa
 
 console.log("Day-wise Wage Map:", dailyWageMap);
 console.log(`Total Wage Computed from Map: ${totalWage}`);
+
+//UC9
+
+// a. Calc total Wage and total hours worked using reduce() and Arrow Functions
+totalWage = Array.from(dailyWageMap.values()).reduce((sum, wage) => sum + wage, 0);
+let totalHours = Array.from(dailyHourMap.values()).reduce((sum, hours) => sum + hours, 0);
+
+console.log(`Total Wage: ${totalWage}, Total Hours Worked: ${totalHours}`);
+
+// b. Show full working days, part working days, and no working days using filter()
+let fullWorkingDays = Array.from(dailyHourMap.entries())
+    .filter(([day, hours]) => hours === FULL_TIME_HOURS)
+    .map(([day, hours]) => day);
+
+let partWorkingDays = Array.from(dailyHourMap.entries())
+    .filter(([day, hours]) => hours === PART_TIME_HOURS)
+    .map(([day, hours]) => day);
+
+let noWorkingDays = Array.from(dailyHourMap.entries())
+    .filter(([day, hours]) => hours === 0)
+    .map(([day, hours]) => day);
+
+console.log(`Full Working Days: ${fullWorkingDays}`);
+console.log(`Part Working Days: ${partWorkingDays}`);
+console.log(`No Working Days: ${noWorkingDays}`);
