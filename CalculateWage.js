@@ -68,6 +68,8 @@ let empDailyHoursMap = new Map();
 //UC8
 let dailyWageMap = new Map(); 
 let dailyHourMap = new Map();  
+//UC10
+let dailyRecords = [];  
 
 
 const getWorkingHours = (emp) => 
@@ -101,7 +103,16 @@ while (totalEmpHrs < MAX_HRS_IN_MONTH && totalWorkingDays < NUM_OF_WORKING_DAYS)
     dailyWageMap.set(totalWorkingDays, dailyWage);
     dailyWageMap.set(totalWorkingDays, dailyWage); 
     dailyHourMap.set(totalWorkingDays, empHrs);
+
+    dailyRecords.push({
+        day: totalWorkingDays,
+        hoursWorked: empHrs,
+        wageEarned: dailyWage
+    });
 }  
+
+
+console.log("Records:", dailyRecords);
 let totalEmpWage = totalEmpHrs * WAGE_PER_HOUR;  
 console.log("Total Days Worked: " + totalWorkingDays + ", Total Hours Worked: " + totalEmpHrs); 
 console.log("Total Employee Wage for " + NUM_OF_WORKING_DAYS + " days: $" + totalEmpWage);
