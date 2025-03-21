@@ -62,8 +62,12 @@ let totalEmpHrs = 0;
 let totalWorkingDays = 0;  
 //UC6
 let dailyWageArray = []; 
+//UC7
 let empDailyWageMap = new Map();
 let empDailyHoursMap = new Map();
+//UC8
+let dailyWageMap = new Map(); 
+
 
 const getWorkingHours = (emp) => 
     emp === IS_PART_TIME ? PART_TIME_HOURS : 
@@ -93,6 +97,7 @@ while (totalEmpHrs < MAX_HOURS_IN_MONTH && totalWorkingDays < NUM_OF_WORKING_DAY
     dailyWageArray.push({ day: totalWorkingDays, dailyWage: dailyWage });
     empDailyWageMap.set(totalWorkingDays, dailyWage); 
     empDailyHoursMap.set(totalWorkingDays, empHrs);
+    dailyWageMap.set(totalWorkingDays, dailyWage);
 }  
 let totalEmpWage = totalEmpHrs * WAGE_PER_HOUR;  
 console.log("Total Days Worked: " + totalWorkingDays + ", Total Hours Worked: " + totalEmpHrs); 
@@ -134,3 +139,9 @@ console.log("Is There Any Part Time Wage?", hasPartTimeWage);
 const workingDays = Array.from(empDailyHoursMap.values())
     .filter(hours => hours > 0).length;
 console.log("Number of Days Employee Worked:", workingDays);
+
+// Compute total wage using Map
+totalWage = Array.from(dailyWageMap.values()).reduce((total, wage) => total + wage, 0);
+
+console.log("Day-wise Wage Map:", dailyWageMap);
+console.log(`Total Wage Computed from Map: ${totalWage}`);
