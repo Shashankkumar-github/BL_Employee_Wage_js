@@ -62,6 +62,14 @@ let totalEmpHrs = 0;
 let totalWorkingDays = 0;  
 //UC6
 let dailyWageArray = []; 
+let empDailyWageMap = new Map();
+let empDailyHoursMap = new Map();
+
+const getWorkingHours = (emp) => 
+    emp === IS_PART_TIME ? PART_TIME_HOURS : 
+    emp === IS_FULL_TIME ? FULL_TIME_HOURS : 0;
+
+
 function calculateDailyWage(empHrs) {
     return empHrs * WAGE_PER_HOUR;
 }
@@ -83,6 +91,8 @@ while (totalEmpHrs < MAX_HOURS_IN_MONTH && totalWorkingDays < NUM_OF_WORKING_DAY
     totalEmpHrs += empHrs;
     let dailyWage = calculateDailyWage(empHrs);
     dailyWageArray.push({ day: totalWorkingDays, dailyWage: dailyWage });
+    empDailyWageMap.set(totalWorkingDays, dailyWage); 
+    empDailyHoursMap.set(totalWorkingDays, empHrs);
 }  
 let totalEmpWage = totalEmpHrs * WAGE_PER_HOUR;  
 console.log("Total Days Worked: " + totalWorkingDays + ", Total Hours Worked: " + totalEmpHrs); 
@@ -90,3 +100,37 @@ console.log("Total Employee Wage for " + NUM_OF_WORKING_DAYS + " days: $" + tota
 
 console.log("UC6 Total Days: " + totalWorkingDays + " Total Hrs: " + totalEmpHrs + " Emp Wage: " + totalWage);
 console.log("Daily Wages Array:", dailyWageArray);
+
+// a.  
+const totalWage = dailyWageArray.reduce((total, wage) => total + wage, 0);
+console.log(`Total Wage: ${totalWage}`);
+
+// b.  
+const dailyWagesWithDays = Array.from(empDailyWageMap.entries())
+    .map(([day, wage]) => `Day ${day}: Wage ${wage}`);
+console.log("Daily Wages with Days:\n", dailyWagesWithDays.join("\n"));
+
+// c.  
+const fullTimeWageDays = Array.from(empDailyWageMap.entries())
+    .filter(([day, wage]) => wage === 160)
+    .map(([day, wage]) => `Day ${day}`);
+console.log("Days with Full Time Wage:", fullTimeWageDays.join(", "));
+
+// d.  
+const firstFullTimeWageDay = Array.from(empDailyWageMap.entries())
+    .find(([day, wage]) => wage === 160);
+console.log(`First Full Time Wage Earned on: Day ${firstFullTimeWageDay[0]}`);
+
+// e.  
+const isEveryFullTimeWageValid = Array.from(empDailyWageMap.values())
+    .every(wage => wage === 160 || wage !== 160);
+console.log("Is Every Full Time Wage Correct?", isEveryFullTimeWageValid);
+
+// f.  
+const hasPartTimeWage = Array.from(empDailyWageMap.values()).some(wage => wage === 80);
+console.log("Is There Any Part Time Wage?", hasPartTimeWage);
+
+// g. 
+const workingDays = Array.from(empDailyHoursMap.values())
+    .filter(hours => hours > 0).length;
+console.log("Number of Days Employee Worked:", workingDays);
